@@ -18,6 +18,7 @@ import java.util.UUID;
 
 /**
  * Simple class to authenticate using microsoft, and check if an account owns minecraft (Does not work for xbox gamepass yet)
+ *
  * @author RightHandMan176 (rhm176. on discord)
  */
 public class MicrosoftLogin {
@@ -33,6 +34,7 @@ public class MicrosoftLogin {
 
     /**
      * Method to request a microsoft access token from the user. Used for basic microsoft authentication
+     *
      * @return A microsoft access token
      */
     public String getAccessToken() {
@@ -78,7 +80,7 @@ public class MicrosoftLogin {
                     }
 
                 } catch (Exception e) {
-                    Logger.error(e,"Error while trying to obtain a Microsoft access token:");
+                    Logger.error(e, "Error while trying to obtain a Microsoft access token:");
                     System.exit(0);
                 }
             });
@@ -95,7 +97,7 @@ public class MicrosoftLogin {
                     }
                     Thread.sleep(50);
                 } catch (Exception e) {
-                    Logger.error(e,"Error while trying to check if user authenticated:");
+                    Logger.error(e, "Error while trying to check if user authenticated:");
                     System.exit(0);
                 }
             }
@@ -104,7 +106,7 @@ public class MicrosoftLogin {
 
             return accessToken;
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to get access token:");
+            Logger.error(e, "Error while trying to get access token:");
             System.exit(0);
         }
         return null;
@@ -112,6 +114,7 @@ public class MicrosoftLogin {
 
     /**
      * Method to obtain an xbox live access token from a microsoft access token. Used for basic xbox live methods.
+     *
      * @param accessToken The microsoft access token.
      * @return An entry containing the user hash of said xbox user and an xbox live login token.
      */
@@ -152,7 +155,7 @@ public class MicrosoftLogin {
 
             return out;
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to get Xbox Live Token:");
+            Logger.error(e, "Error while trying to get Xbox Live Token:");
             System.exit(0);
         }
         return null;
@@ -160,6 +163,7 @@ public class MicrosoftLogin {
 
     /**
      * Acquire an xbox live security token from a normal xbox live token without verifying the user hash.
+     *
      * @param xblToken The xbox live token.
      * @return An Xbox Live Security Token.
      */
@@ -169,6 +173,7 @@ public class MicrosoftLogin {
 
     /**
      * Acquire an xbox live security token from a normal xbox live token
+     *
      * @param xblToken The xbox live token.
      * @param userHash The user hash of said xbox user. Used for verification, but not required
      * @return An Xbox Live Security Token.
@@ -213,7 +218,7 @@ public class MicrosoftLogin {
             is.close();
             return res.get("Token").getAsString();
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to obtain an Xbox Live Security Token:");
+            Logger.error(e, "Error while trying to obtain an Xbox Live Security Token:");
             System.exit(0);
         }
         return null;
@@ -221,8 +226,9 @@ public class MicrosoftLogin {
 
     /**
      * Method to obtain a Mojang access token, used for pretty much all minecraft services which require authentication.
+     *
      * @param xstsToken The xbox live security token
-     * @param userHash The user hash of said xbox user. Used for verification, but not required
+     * @param userHash  The user hash of said xbox user. Used for verification, but not required
      * @return An minecraft (Mojang) access token.
      */
     public String getMinecraftAuthToken(String xstsToken, String userHash) {
@@ -251,7 +257,7 @@ public class MicrosoftLogin {
 
             return res.get("access_token").getAsString();
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to get a Mojang token:");
+            Logger.error(e, "Error while trying to get a Mojang token:");
             System.exit(0);
         }
         return null;
@@ -259,6 +265,7 @@ public class MicrosoftLogin {
 
     /**
      * Method to check if an account actually owns minecraft. Returns false for xbox gamepass users.
+     *
      * @param minecraftToken The minecraft access token.
      * @return whether said account owns minecraft.
      */
@@ -277,7 +284,7 @@ public class MicrosoftLogin {
 
             return !res.getAsJsonArray("items").isEmpty();
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to check if account owns Minecraft:");
+            Logger.error(e, "Error while trying to check if account owns Minecraft:");
             System.exit(0);
         }
         return false;
@@ -285,6 +292,7 @@ public class MicrosoftLogin {
 
     /**
      * Method for profile data
+     *
      * @param minecraftToken The minecraft access token.
      * @return An entry containing the Username and UUID.
      */
@@ -303,7 +311,7 @@ public class MicrosoftLogin {
 
             return new AbstractMap.SimpleEntry<>(res.get("name").getAsString(), UUID.fromString(res.get("id").getAsString().replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5")));
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to obtain profile data:");
+            Logger.error(e, "Error while trying to obtain profile data:");
             System.exit(0);
         }
         return null;

@@ -36,8 +36,9 @@ public class Logger {
     }
 
     public static void error(Exception err) {
-        error(err,"");
+        error(err, "");
     }
+
     public static void error(Exception err, String context) {
         String prefix = (Utils.isColorSupported() ? ConsoleFormats.ANSI_RED : "") + "ERROR";
         if (err == null) {

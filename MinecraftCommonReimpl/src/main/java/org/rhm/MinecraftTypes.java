@@ -41,7 +41,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate Chat Component size:");
+            Logger.error(e, "Error while trying to calculate Chat Component size:");
             return -1;
         }
     }
@@ -74,7 +74,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate VarInt size:");
+            Logger.error(e, "Error while trying to calculate VarInt size:");
             return -1;
         }
     }
@@ -110,7 +110,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate Bitset size:");
+            Logger.error(e, "Error while trying to calculate Bitset size:");
             return -1;
         }
     }
@@ -134,7 +134,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate UUID size:");
+            Logger.error(e, "Error while trying to calculate UUID size:");
             return -1;
         }
     }
@@ -160,7 +160,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate unsigned Long size:");
+            Logger.error(e, "Error while trying to calculate unsigned Long size:");
             return -1;
         }
     }
@@ -223,7 +223,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate String size:");
+            Logger.error(e, "Error while trying to calculate String size:");
             return -1;
         }
     }
@@ -256,7 +256,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate Identifier size:");
+            Logger.error(e, "Error while trying to calculate Identifier size:");
             return -1;
         }
     }
@@ -284,7 +284,7 @@ public interface MinecraftTypes {
 
             return byteOut.size();
         } catch (IOException e) {
-            Logger.error(e,"Error while trying to calculate NBT Compound size:");
+            Logger.error(e, "Error while trying to calculate NBT Compound size:");
             return -1;
         }
     }

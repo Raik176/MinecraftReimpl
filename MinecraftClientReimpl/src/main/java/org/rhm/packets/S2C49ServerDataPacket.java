@@ -37,7 +37,7 @@ public class S2C49ServerDataPacket extends MinecraftServerPacket {
 
         hasIcon = readBoolean(in);
         int size = readVarInt(in);
-        if (hasIcon) icon = readNBytes(in, size-102);
+        if (hasIcon) icon = readNBytes(in, size - 102);
     }
 
     @Override

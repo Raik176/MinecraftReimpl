@@ -61,7 +61,7 @@ public class PlayerCerts {
 
                     Thread.sleep(Duration.between(LocalDateTime.now(), targetTime).toMillis());
                 } catch (Exception e) {
-                    Logger.error(e,"Error while updating certs:");
+                    Logger.error(e, "Error while updating certs:");
                 }
             }
         }).start();

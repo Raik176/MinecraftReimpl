@@ -38,7 +38,6 @@ class ConsoleFormats {
 public class Utils implements MinecraftTypes {
     public static final String obfuscationChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;':\",.<>?/~`⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿®¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ ";
     public static final String COLOR_PATTERN = "[§&]([0-9a-fA-FkKlLmMnNoOrR])";
-    public static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     public static final Map<Character, String> colorMap = Map.ofEntries(
             Map.entry('4', ConsoleFormats.ANSI_DARK_RED),
             Map.entry('c', ConsoleFormats.ANSI_RED),
@@ -63,6 +62,7 @@ public class Utils implements MinecraftTypes {
             Map.entry('o', ConsoleFormats.SGR_ITALIC),
             Map.entry('k', "")
     );
+    public static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     public final Map<String, Character> fancyColorMap = Map.ofEntries(
             Map.entry("dark_red", '4'),
             Map.entry("red", 'c'),
@@ -87,6 +87,8 @@ public class Utils implements MinecraftTypes {
             //Map.entry('o', ConsoleFormats.SGR_ITALIC),
             //Map.entry('k', "")
     );
+    private SecureRandom rand = new SecureRandom();
+
     public Utils() {
 
     }
@@ -115,6 +117,14 @@ public class Utils implements MinecraftTypes {
             c2 = c;
         }
         return inp;
+    }
+
+    public static byte[] getFirstNElements(byte[] array, int n) {
+        if (array.length <= n) {
+            return array;
+        } else {
+            return Arrays.copyOfRange(array, 0, n);
+        }
     }
 
     public String formatJsonCompound(JsonObject compound) {
@@ -166,7 +176,7 @@ public class Utils implements MinecraftTypes {
             JsonObject elem = gson.fromJson(s, JsonObject.class);
             return formatJsonCompound(elem);
         } catch (Exception e) {
-            Logger.error(e,"Error while trying to format color codes:");
+            Logger.error(e, "Error while trying to format color codes:");
             return s;
         }
     }
@@ -175,7 +185,6 @@ public class Utils implements MinecraftTypes {
         return inp.replaceAll(COLOR_PATTERN, "");
     }
 
-    private SecureRandom rand = new SecureRandom();
     public long getNewSalt() {
         return rand.nextLong();
     }
@@ -186,13 +195,5 @@ public class Utils implements MinecraftTypes {
 
         System.arraycopy(array, 0, newArray, 1, array.length);
         return newArray;
-    }
-
-    public static byte[] getFirstNElements(byte[] array, int n) {
-        if (array.length <= n) {
-            return array;
-        } else {
-            return Arrays.copyOfRange(array, 0, n);
-        }
     }
 }

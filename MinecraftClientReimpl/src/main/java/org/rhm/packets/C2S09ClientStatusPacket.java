@@ -7,20 +7,6 @@ import java.io.IOException;
 
 public class C2S09ClientStatusPacket extends MinecraftClientPacket {
     private Action action;
-    public enum Action {
-        RESPAWN(0),
-        REQUEST_STATS(1);
-
-        private final int value;
-
-        Action(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 
     public C2S09ClientStatusPacket(Action action) {
         super(0x09);
@@ -36,5 +22,20 @@ public class C2S09ClientStatusPacket extends MinecraftClientPacket {
     @Override
     protected void write(MinecraftOutputStream out) throws IOException {
         out.writeVarInt(action.getValue());
+    }
+
+    public enum Action {
+        RESPAWN(0),
+        REQUEST_STATS(1);
+
+        private final int value;
+
+        Action(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 }

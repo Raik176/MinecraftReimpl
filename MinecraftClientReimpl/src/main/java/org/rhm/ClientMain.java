@@ -193,7 +193,7 @@ public class ClientMain {
                 decryption = EncryptionUtils.getCipher(2, secretKey);
                 encryption = EncryptionUtils.getCipher(1, secretKey);
             } catch (Exception e) {
-                Logger.error(e,"Could not create a secret key:");
+                Logger.error(e, "Could not create a secret key:");
                 System.exit(0);
             }
 
@@ -373,7 +373,7 @@ public class ClientMain {
                 packetData.close();
             }
         } catch (Exception e) {
-            Logger.error(e,"Error during connection to server:");
+            Logger.error(e, "Error during connection to server:");
         }
     }
 

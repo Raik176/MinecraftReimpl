@@ -1,7 +1,7 @@
 package org.rhm.packets;
 
-import org.rhm.Identifier;
 import org.rhm.ClientMain;
+import org.rhm.Identifier;
 import org.rhm.utils.Logger;
 import org.rhm.utils.MinecraftOutputStream;
 import org.rhm.utils.PlayState;

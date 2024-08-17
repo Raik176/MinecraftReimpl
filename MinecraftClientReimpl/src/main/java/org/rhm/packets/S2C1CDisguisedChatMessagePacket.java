@@ -1,7 +1,7 @@
 package org.rhm.packets;
 
-import org.rhm.utils.MinecraftOutputStream;
 import org.rhm.utils.Logger;
+import org.rhm.utils.MinecraftOutputStream;
 
 import java.io.DataInputStream;
 import java.io.IOException;

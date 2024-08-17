@@ -2,12 +2,11 @@ package org.rhm.packets;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import org.rhm.ClientMain;
+import org.rhm.utils.Logger;
 import org.rhm.utils.MinecraftOutputStream;
 import org.rhm.utils.PlayState;
 import org.rhm.utils.Utils;
-import org.rhm.utils.Logger;
 
 import java.io.DataInputStream;
 import java.io.IOException;

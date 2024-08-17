@@ -6,8 +6,8 @@ import org.rhm.Identifier;
 import org.rhm.MinecraftTypes;
 import org.rhm.utils.CompressionUtils;
 import org.rhm.utils.Logger;
-import org.rhm.utils.Utils;
 import org.rhm.utils.MinecraftOutputStream;
+import org.rhm.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
