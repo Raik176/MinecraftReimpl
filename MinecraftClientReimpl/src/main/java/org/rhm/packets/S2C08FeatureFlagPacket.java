@@ -7,15 +7,28 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class S2C08FeatureFlagPacket extends MinecraftServerPacket {
+    private int total;
+    private Identifier[] features;
+
     public S2C08FeatureFlagPacket() {
         super(0x08);
     }
 
+    public int getTotal() {
+        return total;
+    }
+
+    public Identifier[] getFeatures() {
+        return features;
+    }
+
     @Override
     protected void read(DataInputStream inp) throws IOException {
-        int total = readVarInt(inp);
+        total = readVarInt(inp);
+        features = new Identifier[total];
         for (int i = 0; i < total; i++) {
             Identifier feature = readIdentifier(inp);
+            features[i] = feature;
         }
     }
 

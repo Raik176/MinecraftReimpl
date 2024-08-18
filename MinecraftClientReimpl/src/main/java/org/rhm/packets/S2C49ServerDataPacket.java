@@ -5,6 +5,7 @@ import org.rhm.utils.MinecraftOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+//TODO: fix and implement
 public class S2C49ServerDataPacket extends MinecraftServerPacket {
     private String description;
     private boolean hasIcon;

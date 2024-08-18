@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+//TODO implement and fix
 public class S2C02LoginSuccessPacket extends MinecraftServerPacket {
     private String playerName;
     private UUID uuid;

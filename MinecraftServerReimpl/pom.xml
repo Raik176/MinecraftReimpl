@@ -9,19 +9,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <version>${minecraft.server.version}</version>
     <artifactId>MinecraftServerReimpl</artifactId>
-
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.rhm</groupId>
             <artifactId>MinecraftCommonReimpl</artifactId>
-            <version>${project.version}</version>
+            <version>${minecraft.common.version}</version>
         </dependency>
     </dependencies>
 </project>

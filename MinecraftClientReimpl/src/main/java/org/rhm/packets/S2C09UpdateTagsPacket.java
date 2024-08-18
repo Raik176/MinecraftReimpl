@@ -6,8 +6,8 @@ import org.rhm.utils.MinecraftOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+//TODO: fix this mess, implement, fix
 public class S2C09UpdateTagsPacket extends MinecraftServerPacket {
-    //TODO: fix this mess
     public S2C09UpdateTagsPacket() {
         super(0x09);
     }

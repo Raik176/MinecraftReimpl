@@ -1,20 +1,24 @@
 package org.rhm.packets;
 
-import net.querz.nbt.tag.CompoundTag;
 import org.rhm.utils.MinecraftOutputStream;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-//TODO fix/implement?
-public class S2C05RegistryDataPacket extends MinecraftServerPacket {
-    public S2C05RegistryDataPacket() {
-        super(0x05);
+public class S2C51HeldItemPacket extends MinecraftServerPacket {
+    byte newSlot;
+
+    public S2C51HeldItemPacket() {
+        super(0x51);
+    }
+
+    public byte getNewSlot() {
+        return newSlot;
     }
 
     @Override
     protected void read(DataInputStream in) throws IOException {
-        CompoundTag tag = readNBTCompound(in, dataSizeRemaining);
+        newSlot = readNBytes(in,1)[0];
     }
 
     @Override

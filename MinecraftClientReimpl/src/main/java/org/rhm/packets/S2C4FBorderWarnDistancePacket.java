@@ -1,22 +1,24 @@
 package org.rhm.packets;
 
-import org.rhm.ClientMain;
 import org.rhm.utils.MinecraftOutputStream;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class S2C3CCombatDeathPacket extends MinecraftServerPacket {
-    private int playerID;
+public class S2C4FBorderWarnDistancePacket extends MinecraftServerPacket {
+    private int warningBlockDistance;
 
-    public S2C3CCombatDeathPacket() {
-        super(0x3C);
+    public S2C4FBorderWarnDistancePacket() {
+        super(0x4F);
+    }
+
+    public int getWarningBlockDistance() {
+        return warningBlockDistance;
     }
 
     @Override
     protected void read(DataInputStream in) throws IOException {
-        playerID = ClientMain.utils.readVarInt(in);
-        in.readNBytes(dataSizeRemaining);
+        warningBlockDistance = readVarInt(in);
     }
 
     @Override

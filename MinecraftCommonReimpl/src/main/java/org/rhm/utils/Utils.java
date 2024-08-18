@@ -174,6 +174,7 @@ public class Utils implements MinecraftTypes {
     public String formatColorAll(String s) {
         try {
             JsonObject elem = gson.fromJson(s, JsonObject.class);
+            if (elem.isJsonPrimitive()) return elem.toString();
             return formatJsonCompound(elem);
         } catch (Exception e) {
             Logger.error(e, "Error while trying to format color codes:");

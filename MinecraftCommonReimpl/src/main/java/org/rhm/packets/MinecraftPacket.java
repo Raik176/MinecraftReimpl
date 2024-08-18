@@ -152,6 +152,32 @@ public abstract class MinecraftPacket implements MinecraftTypes {
         return inp.readInt();
     }
 
+    public final double readDouble(DataInputStream inp) throws IOException {
+        dataSizeRemaining -= Double.BYTES;
+        return inp.readDouble();
+    }
+
+    public final float readFloat(DataInputStream inp) throws IOException {
+        dataSizeRemaining -= Float.BYTES;
+        return inp.readFloat();
+    }
+
+    public final int readUnsignedByte(DataInputStream inp) throws IOException {
+        int val = inp.readUnsignedByte();
+        dataSizeRemaining -= 1;
+        return val;
+    }
+
+    public final float readAngle(DataInputStream inp) throws IOException {
+        return readUnsignedByte(inp) / (256.0F / 360.0F);
+    }
+
+    public final short readShort(DataInputStream inp) throws IOException {
+        short val = inp.readShort();
+        dataSizeRemaining -= Short.BYTES;
+        return val;
+    }
+
     @Override
     public final Identifier readIdentifier(DataInputStream inp) throws IOException {
         Identifier val = MinecraftTypes.super.readIdentifier(inp);

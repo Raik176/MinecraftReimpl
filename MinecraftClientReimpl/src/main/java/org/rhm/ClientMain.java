@@ -39,22 +39,6 @@ public class ClientMain {
         utils = new Utils();
         Scanner scanner = new Scanner(System.in);
 
-        /* FIXME: MinecraftPacket class does not have a good way of dynamically loading packets yet
-        String location = (Main.class.getPackage().getName() + ".packets").replaceAll("\\.","/");
-        Enumeration<URL> packets = Thread.currentThread().getContextClassLoader().getResources(location);
-        Collections.list(packets).stream().map(url -> new File(url.getFile())).filter(File::exists)
-                .flatMap(directory -> Arrays.stream(directory.listFiles())).filter(f -> f.getName().endsWith(".class"))
-                .map(f -> location + "/" + f.getName().substring(0, f.getName().length() - 6)).forEach(clazz -> {
-                    try {
-                        Class c = Class.forName(clazz.replaceAll("/","."));
-                        Class<? extends MinecraftPacket> packet = (Class<? extends MinecraftPacket>) c;
-
-                    } catch (ClassNotFoundException e) {
-                        Logger.error("Error while trying to load class at location " + clazz);
-                        Logger.error(e);
-                    }
-                });
-         */
         //TODO: important Login (play)
         //Also: Player Info Update
 
@@ -75,20 +59,74 @@ public class ClientMain {
                 entry(0x02, S2C02FinishConfigurationPacket.class),
                 entry(0x03, S2CKeepAlivePacket.class),
                 entry(0x05, S2C05RegistryDataPacket.class),
+                // 0x06 Remove Resource Pack
+                entry(0x07, S2C09AddResourcePackPacket.class),
                 entry(0x08, S2C08FeatureFlagPacket.class)
+                // 0x09 Update Tags
         ));
         packetRegistryServer.put(PlayState.PLAY, Map.ofEntries( //Stage 3, play
+                entry(0x00, S2C00BundleDelimiterPacket.class),
+                entry(0x01, S2C01SpawnEntityPacket.class),
                 entry(0x18, S2CPluginMessagePacket.class),
                 entry(0x1B, S2CDisconnectPacket.class),
                 entry(0x24, S2CKeepAlivePacket.class),
                 entry(0x33, S2C33PingPacket.class),
-                entry(0x34, S2C34PingResponsePacket.class), //PlayerChat, DisguisedChat, SystemChat
+                entry(0x34, S2C34PingResponsePacket.class),
                 entry(0x67, S2C67StartConfigurationPacket.class),
                 entry(0x37, S2C37PlayerChatPacket.class),
                 entry(0x49, S2C49ServerDataPacket.class),
+                entry(0x51, S2C51HeldItemPacket.class),
                 entry(0x69, S2C69SystemChatMessagePacket.class),
-                entry(0x3C, S2C3CCombatDeathPacket.class)
+                entry(0x27, S2C27ParticlePacket.class),
+                entry(0x0B, S2C0BChangeDifficultyPacket.class),
+                entry(0x4F, S2C4FBorderWarnDistancePacket.class),
+                entry(0x1A, S2C1ASetPlayerGroundPacket.class),
+                entry(0x3D, S2C3DLookAtPacket.class),
+                entry(0x1C, S2C1CDisguisedChatMessagePacket.class),
+                entry(0x3C, S2C3CPlayerInfoUpdatePacket.class)
         ));
+
+        try { //Debug code to check for missing, not registerd packets reutilized this from the automatic registering
+            List<String> allServerPackets = new ArrayList<>();
+            List<String> registeredServerPackets = new ArrayList<>();
+
+            String location = (ClientMain.class.getPackage().getName() + ".packets").replace('.', '/');
+            Enumeration<URL> packets = Thread.currentThread().getContextClassLoader().getResources(location);
+
+            Collections.list(packets).stream()
+                    .map(url -> new File(url.getFile()))
+                    .filter(File::exists)
+                    .flatMap(directory -> Arrays.stream(directory.listFiles()))
+                    .filter(f -> f.getName().endsWith(".class"))
+                    .map(f -> location + "/" + f.getName().replaceFirst("\\.class$", ""))
+                    .forEach(clazz -> {
+                        try {
+                            if (!clazz.endsWith("MinecraftClientPacket") &&
+                                    !clazz.endsWith("MinecraftServerPacket") &&
+                                    !clazz.endsWith("MinecraftPacket")) {
+
+                                Class<?> c = Class.forName(clazz.replace('/', '.'));
+                                if (MinecraftServerPacket.class.isAssignableFrom(c)) {
+                                    allServerPackets.add(c.getName());
+                                }
+                            }
+                        } catch (ClassNotFoundException e) {
+                            Logger.error("Error while trying to load class at location " + clazz);
+                            Logger.error(e);
+                        }
+                    });
+
+            packetRegistryServer.forEach((playState, packetMap) ->
+                    packetMap.values().forEach(packetClass -> registeredServerPackets.add(packetClass.getName()))
+            );
+
+            allServerPackets.stream()
+                    .filter(packet -> !registeredServerPackets.contains(packet))
+                    .forEach(packet -> Logger.debug("Class `" + packet + "` is not registered!"));
+
+        } catch (Exception e) {
+            Logger.error(e, "Error while trying to check for missing registered packets:");
+        }
 
         if (!status) {
             loginData = new LoginData();
@@ -325,20 +363,12 @@ public class ClientMain {
                         } else {
                             Logger.info("Skipped Encryption Request as the current login type is Offline.");
                         }
-                    } else if (instance instanceof S2C00StatusPacket) {
-                        S2C00StatusPacket packet1 = (S2C00StatusPacket) instance;
-                        Logger.info("Got server status:");
-                        Logger.info("  - Protocol version: " + packet1.getProtocol() + " (" + packet1.getFancyVersion() + ")");
-                        Logger.info("  - Players: " + packet1.getPlayersOnline() + "/" + packet1.getMaxPlayers());
-                        Logger.info("  - Description (MOTD):\n" + packet1.getDescription());
-                        System.exit(0);
-                        //new C2S01PingPacket().writeToStream(output.get());
                     } else if (instance instanceof S2C02FinishConfigurationPacket) {
                         C2S02FinishConfigurationPacket packet2 = new C2S02FinishConfigurationPacket();
                         packet2.writeToStream(output.get());
                         ClientMain.curState = PlayState.PLAY;
                     } else if (instance instanceof S2C03SetCompressionPacket) {
-                        CompressionUtils.compressionThreshold = ((S2C03SetCompressionPacket) instance).compressionThreshold;
+                        CompressionUtils.compressionThreshold = ((S2C03SetCompressionPacket) instance).getCompressionThreshold();
                         Logger.info("Received set compression packet with compression threshold of: " + CompressionUtils.compressionThreshold);
                     } else if (instance instanceof S2C02LoginSuccessPacket) {
                         S2C02LoginSuccessPacket packet1 = (S2C02LoginSuccessPacket) instance;
@@ -359,9 +389,8 @@ public class ClientMain {
                         long id = ((S2CKeepAlivePacket) instance).getId();
                         C2SKeepAlivePacket packet1 = new C2SKeepAlivePacket(id);
                         packet1.writeToStream(output.get());
-                    } else if (instance instanceof S2C3CCombatDeathPacket) {
-                        C2S09ClientStatusPacket packet1 = new C2S09ClientStatusPacket(C2S09ClientStatusPacket.Action.RESPAWN);
-                        //packet1.writeToStream(output.get());
+                    } else {
+                        Logger.debug("Unhandled packet: " + instance.getClass().getSimpleName());
                     }
                 } else {
                     byte[] bytes = packetData.readNBytes(size);
